@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "21234920257",
+    "project_id": "tractalk-4e2d8",
+    "storage_bucket": "tractalk-4e2d8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21234920257:android:f9254c57ef8d1f2e9c4fc0",
+        "android_client_info": {
+          "package_name": "com.linblink.tractalk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7PtS-djic-Vufu6YjCZVHmyB7ZJUMgaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
