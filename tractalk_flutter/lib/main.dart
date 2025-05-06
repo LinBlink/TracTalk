@@ -1,9 +1,12 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tractalk_flutter/auth/login_screen.dart';
+import 'package:tractalk_flutter/auth/otp_screen.dart';
 
 import 'package:tractalk_flutter/main_screen/home_screen.dart';
+import 'package:tractalk_flutter/providers/authentication_provider.dart';
 
 import 'firebase_options.dart';
 
@@ -11,7 +14,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  runApp(MainApp(savedThemeMode: savedThemeMode));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthenticationProvider()
+          
+          ),
+      ],
+      child: MainApp(savedThemeMode: savedThemeMode),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -43,7 +56,7 @@ class MainApp extends StatelessWidget {
               useMaterial3: true,
             ),
             darkTheme: darkTheme,
-            home: LoginScreen(),
+            home: OTPScreen(),
           ),
     );
   }

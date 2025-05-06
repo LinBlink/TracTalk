@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:tractalk_flutter/providers/authentication_provider.dart';
 import 'package:tractalk_flutter/utils/assets_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_picker/country_picker.dart';
@@ -41,6 +43,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthenticationProvider>();
+
     return Scaffold(
       body: Center(
         child: Padding(
@@ -127,18 +131,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   suffixIcon:
                       _phoneNumberController.text.length > 9
-                          ? MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: InkWell(
-                              onTap: () {
-                                
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(right: 20.0),
-                                child: const Icon(Icons.arrow_circle_right, color: Colors.green, size: 30,),
-                              ),
-                            ),
-                          )
+                          ? authProvider.isLoading
+                              ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator(),
+                              )
+                              : MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: InkWell(
+                                  onTap: () {
+                                    // sign in with phone number
+                                    authProvider.signInWithPhoneNumber(
+                                      '+${_selectedCountry.phoneCode}${_phoneNumberController.text}',
+                                      context,
+                                    );
+                                    
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 20.0),
+                                    child: const Icon(
+                                      Icons.arrow_circle_right,
+                                      color: Colors.green,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ),
+                              )
                           : null,
 
                   border: OutlineInputBorder(

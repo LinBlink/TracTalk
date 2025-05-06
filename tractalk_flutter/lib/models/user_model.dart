@@ -1,3 +1,5 @@
+import 'package:tractalk_flutter/constants.dart';
+
 class UserModel {
   String uid;
   String name;
@@ -29,18 +31,35 @@ class UserModel {
     required this.sentFriendRequestsUIDs,
   });
 
+  UserModel.toMap({
+    required this.uid,
+    required this.name,
+    required this.phoneNumber,
+    required this.image,
+    required this.token,
+    required this.aboutMe,
+    required this.lastSeen,
+    required this.createdAt,
+    required this.isOnline,
+    required this.friendsUIDs,
+    required this.friendRequestsUIDs,
+    required this.blockedUIDs,
+    required this.sentFriendRequestsUIDs,
+  });
+
   UserModel.fromMap(Map<String, dynamic> map)
-    : uid = map['uid'],
-      name = map['name'],
-      phoneNumber = map['phoneNumber'],
-      image = map['image'],
-      token = map['token'],
-      aboutMe = map['aboutMe'],
-      lastSeen = map['lastSeen'],
-      createdAt = map['createdAt'],
-      isOnline = map['isOnline'],
-      friendsUIDs = List<String>.from(map['friendsUIDs']),
-      friendRequestsUIDs = List<String>.from(map['friendRequestsUIDs']),
-      blockedUIDs = List<String>.from(map['blockedUIDs']),
-      sentFriendRequestsUIDs = List<String>.from(map['sentFriendRequestsUIDs']);
+    : uid = map[Constants.uid] ?? '',
+      name = map[Constants.name] ?? '',
+      phoneNumber = map[Constants.phoneNumber] ?? '',
+      image = map[Constants.image] ?? '',
+      token = map[Constants.token] ?? '',
+      aboutMe = map[Constants.aboutMe] ?? '',
+      lastSeen = map[Constants.lastSeen] ?? '',
+      createdAt = map[Constants.createdAt] ?? '',
+      isOnline = map[Constants.isOnline] ?? false,
+      friendsUIDs = List<String>.from(map[Constants.friendsUIDs] ?? []),
+      friendRequestsUIDs = List<String>.from(map[Constants.friendRequestsUIDs] ?? []),
+      blockedUIDs = List<String>.from(map[Constants.blockedUIDs] ?? []),
+      sentFriendRequestsUIDs = List<String>.from(map[Constants.sentFriendRequestsUIDs] ?? []);
+     
 }
