@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +59,15 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 'Welcome to TracTalk',
                 style: GoogleFonts.openSans(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.deepPurple,
+                ),
+              ),
+              Text(
+                'A chatting app focused on tracking your cared ones',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.openSans(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
@@ -76,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               TextFormField(
                 onChanged: (value) {
+                  // to update the UI
                   setState(() {});
                 },
 
@@ -145,7 +154,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       '+${_selectedCountry.phoneCode}${_phoneNumberController.text}',
                                       context,
                                     );
-                                    
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.only(right: 20.0),
@@ -166,13 +174,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 keyboardType: TextInputType.phone,
 
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
-                  }
-                  return null;
-                },
-
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your phone number';
+                //   }
+                //   return null;
+                // },
                 textInputAction: TextInputAction.done,
               ),
             ],

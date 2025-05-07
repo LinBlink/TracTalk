@@ -31,21 +31,25 @@ class UserModel {
     required this.sentFriendRequestsUIDs,
   });
 
-  UserModel.toMap({
-    required this.uid,
-    required this.name,
-    required this.phoneNumber,
-    required this.image,
-    required this.token,
-    required this.aboutMe,
-    required this.lastSeen,
-    required this.createdAt,
-    required this.isOnline,
-    required this.friendsUIDs,
-    required this.friendRequestsUIDs,
-    required this.blockedUIDs,
-    required this.sentFriendRequestsUIDs,
-  });
+  // user model toMap
+  Map<String, dynamic> toMap() {
+    return {
+      "uid":uid,
+      "name":name,
+      "phoneNumber":phoneNumber,
+      "image":image,
+      "token":token,
+      "aboutMe":aboutMe,
+      "lastSeen":lastSeen,
+      "createdAt":createdAt,
+      "isOnline":isOnline,
+      "friendsUIDs":friendsUIDs,
+      "friendRequestsUIDs":friendRequestsUIDs,
+      "blockedUIDs":blockedUIDs,
+      "sentFriendRequestsUIDs":sentFriendRequestsUIDs,
+      
+    };
+  }
 
   UserModel.fromMap(Map<String, dynamic> map)
     : uid = map[Constants.uid] ?? '',

@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
+import 'package:tractalk_flutter/constants.dart';
+import 'package:tractalk_flutter/providers/authentication_provider.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
@@ -12,12 +16,10 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   final TextEditingController _otpController = TextEditingController();
-
   final FocusNode _otpFocusNode = FocusNode();
 
   String? _optCode;
 
-  bool _isPinCompleted = false;
 
   @override
   void dispose() {
@@ -28,6 +30,43 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final verificationId = args[Constants.verificationId] as String;
+    final phoneNumber = args[Constants.phoneNumber] as String;
+    final authProvider = context.watch<AuthenticationProvider>();
+
+    void verifyOTPCode({
+      required String verificationId,
+      required String smsCode,
+    }) async {
+      final authProvider = context.read<AuthenticationProvider>();
+      authProvider.verifyOTPCode(
+        verificationId: verificationId,
+        smsCode: smsCode,
+        context: context,
+        onSuccess: () async {
+          // 1. Check if the user exists in Firestore
+          bool userExists = await authProvider.checkIfUserExists();
+
+          // 2. If the user exists, navigate to the home screen
+          //  - get user data from Firestore
+          //  - save user info to provider / shared_prefereneces
+          if (userExists) {
+            await authProvider.getUserDataFromFireStore();
+            await authProvider.saveUserDataToSharedPreferences();
+            navigate(userExists: true);
+          } else {
+            navigate(userExists: false);
+          }
+
+          // 3. If the user does not exist, navigate to the user information screen
+
+          Navigator.of(context).pushReplacementNamed('/home');
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Enter OTP')),
       body: Center(
@@ -53,10 +92,10 @@ class _OTPScreenState extends State<OTPScreen> {
                     style: TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    '+1234567890',
+                  Text(
+                    phoneNumber,
                     // textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.deepPurple,
@@ -65,6 +104,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 ],
               ),
               const SizedBox(height: 20),
+
               SizedBox(
                 height: 68,
                 child: Pinput(
@@ -74,6 +114,10 @@ class _OTPScreenState extends State<OTPScreen> {
                     setState(() {
                       _optCode = value;
                       print("Completed OTP Code: $_optCode");
+                      verifyOTPCode(
+                        verificationId: verificationId,
+                        smsCode: "$_optCode",
+                      );
                     });
                   },
 
@@ -120,6 +164,25 @@ class _OTPScreenState extends State<OTPScreen> {
                   ),
                 ),
               ),
+
+              authProvider.isLoading
+                  ? const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    )
+                  : const SizedBox.shrink(),
+
+              authProvider.isSuccessful
+                  ? const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 30,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+
               const SizedBox(height: 20),
               Text(
                 'Didn\'t receive the code?',
@@ -152,5 +215,13 @@ class _OTPScreenState extends State<OTPScreen> {
         ),
       ),
     );
+  }
+
+  void navigate({required bool userExists}) {
+    if (userExists) {
+      Navigator.pushReplacementNamed(context, Constants.homeScreen);
+    } else {
+      Navigator.pushReplacementNamed(context, Constants.userInformationScreen);
+    }
   }
 }

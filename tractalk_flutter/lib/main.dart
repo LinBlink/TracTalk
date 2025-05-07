@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tractalk_flutter/auth/login_screen.dart';
 import 'package:tractalk_flutter/auth/otp_screen.dart';
+import 'package:tractalk_flutter/auth/user_infomation_screen.dart';
+import 'package:tractalk_flutter/constants.dart';
 
 import 'package:tractalk_flutter/main_screen/home_screen.dart';
 import 'package:tractalk_flutter/providers/authentication_provider.dart';
@@ -17,10 +19,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => AuthenticationProvider()
-          
-          ),
+        ChangeNotifierProvider(create: (context) => AuthenticationProvider()),
       ],
       child: MainApp(savedThemeMode: savedThemeMode),
     ),
@@ -56,7 +55,15 @@ class MainApp extends StatelessWidget {
               useMaterial3: true,
             ),
             darkTheme: darkTheme,
-            home: OTPScreen(),
+            // home: const UserInfomationScreen(),
+            initialRoute: Constants.loginScreen,
+            routes: {
+              Constants.loginScreen: (context) => const LoginScreen(),
+              Constants.otpScreen: (context) => const OTPScreen(),
+              Constants.userInformationScreen:
+                  (context) => const UserInfomationScreen(),
+              Constants.homeScreen: (context) => const HomeScreen(),
+            },
           ),
     );
   }
